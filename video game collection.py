@@ -27,7 +27,7 @@ def f1():
         counter = 0
         score = 0
         clock = pygame.time.Clock()
-        font1 = pygame.font.Font(None, 30)
+        font1 = pygame.font.SysFont('Arial', 30)
         text1 = font1.render("1-quit", True, (0, 255, 0))
         while True:
             counter += 1
@@ -82,7 +82,7 @@ def f1():
             pygame.display.update()
             clock.tick(60)
         close = False
-        font1 = pygame.font.Font(None, 50)
+        font1 = pygame.font.SysFont('Arial', 50)
         text1 = font1.render("game over", True, (0, 255, 0))
         text2 = font1.render("score: " + str(score), True, (0, 255, 0))
         text3 = font1.render("1-try again", True, (0, 255, 0))
@@ -125,8 +125,8 @@ def f2():
         r1_move_down = False
         r3_x_add = 2
         r3_y_add = randint(3, 7)
-        font1 = pygame.font.Font(None, 100)
-        font2 = pygame.font.Font(None, 50)
+        font1 = pygame.font.SysFont('Arial', 100)
+        font2 = pygame.font.SysFont('Arial', 50)
         text2 = font2.render("1-quit", True, (255, 0, 0))
         clock = pygame.time.Clock()
         counter1 = 5
@@ -228,7 +228,7 @@ def f3():
         r2_move_down = False
         r3_x_add = 2
         r3_y_add = randint(3, 7)
-        font1 = pygame.font.Font(None, 100)
+        font1 = pygame.font.SysFont('Arial', 100)
         clock = pygame.time.Clock()
         counter1 = 0
         closewin = False
@@ -346,9 +346,9 @@ def f4():
         r13_2 = pygame.Rect(300, 314, 100, 4)
         r14_2 = pygame.Rect(300, 234, 950, 4)
         r17_2 = pygame.Rect(875, 154, 100, 4)
-        font1 = pygame.font.Font(None, 70)
-        font2 = pygame.font.Font(None, 30)
-        font3 = pygame.font.Font(None, 20)
+        font1 = pygame.font.SysFont('Arial', 70)
+        font2 = pygame.font.SysFont('Arial', 30)
+        font3 = pygame.font.SysFont('Arial', 20)
         text1 = font2.render("Avoid the red rectangles!", True, (255, 0, 0))
         text2 = font3.render('Finish line!', True, (255, 150, 0))
         text3 = font2.render('(1-quit)', True, (255, 0, 0))
@@ -528,7 +528,7 @@ def f5():
         objectsgreen = [r2, r3, r3_2, r4, r4_2, r5, r5_2, r7, r7_2, r9, r9_2, r11, r11_2, r15, r15_2, r19, r19_2, r23, r23_2, r27, r27_2]
         objectsred = [r8, r10, r13, r16, r17, r18, r20, r21, r24, r26, r28, r29]
         objectsyellow = [r6, r12, r14, r22, r25]
-        font1 = pygame.font.Font(None, 30)
+        font1 = pygame.font.SysFont('Arial', 30)
         text1 = font1.render("2-manual (progress will be deleted)", True, (255, 0, 0))
         text12 = font1.render("Finish line", True, (255, 0, 0))
         see_manual = False
@@ -706,8 +706,8 @@ def f6():
         r1 = pygame.Rect(100, 600, 30, 30)
         r2 = pygame.Rect(0, 630, 1500, 120)
         s1 = pygame.Rect(xs1, 580, 50, 50)
-        font1 = pygame.font.Font(None, 50)
-        font2 = pygame.font.Font(None, 100)
+        font1 = pygame.font.SysFont('Arial', 50)
+        font2 = pygame.font.SysFont('Arial', 100)
         text1 = font1.render("1-quit", True, (255, 0, 0))
         counter1 = True
         counter2 = 5
@@ -802,8 +802,8 @@ def f7():
         r2 = pygame.Rect(0, 630, 1500, 120)
         r3 = pygame.Rect(0, 0, 1500, 120)
         s1 = pygame.Rect(xs1, ys1_1, 50, 50)
-        font1 = pygame.font.Font(None, 30)
-        font2 = pygame.font.Font(None, 100)
+        font1 = pygame.font.SysFont('Arial', 30)
+        font2 = pygame.font.SysFont('Arial', 100)
         text1 = font1.render("1-quit", True, (255, 0, 0))
         counter1 = True
         counter2 = 5
@@ -936,7 +936,7 @@ while closeall == False:
         controls.append(False)
         rectangles.append(pygame.rect.Rect(50, y, 1400, 70))
         y += 70
-    font = pygame.font.Font(None, 70)
+    font = pygame.font.SysFont('Arial', 70)
     text1 = font.render('evasion', True, (0, 0, 0))
     text2 = font.render('paddle game I', True, (0, 0, 0))
     text3 = font.render('paddle game II', True, (0, 0, 0))
