@@ -967,6 +967,374 @@ def f7():
             display.update()
             clock.tick(60)
 
+def f8():
+    global closeall
+    global close
+    global owon
+    global xwon
+    global tie
+    global listofclicks
+    global istheturnofx
+
+    class Button():
+        def __init__(self, text, window, x, y, width, height, colour):
+            self.rect = rect.Rect(x, y, width, height)
+            self.colour = colour
+            self.window = window
+            self.text = text
+        def show(self):
+            draw.rect(self.window, self.colour, self.rect)
+            try:
+                self.window.blit(self.textrender, (self.rect.x, self.rect.y))
+            except:
+                pass
+        def click(self, function):
+            global istheturnofx
+            if i.type == MOUSEBUTTONDOWN and i.button == 1:
+                x, y = i.pos
+                try:
+                    if self.rect.collidepoint(x, y):
+                        function()
+                except:
+                    pass
+        def set_text(self):
+            if istheturnofx:
+                if self.text == None:
+                    self.text = 'X'
+                    self.textrender = font.SysFont('Arial', 150).render(self.text, True, (0, 0, 0))
+                    checkturn()
+            else:
+                if self.text == None:
+                    self.text = 'O'
+                    self.textrender = font.SysFont('Arial', 150).render(self.text, True, (0, 0, 0)) 
+                    checkturn()  
+
+    def checkturn():
+        global istheturnofx
+        if istheturnofx:
+            istheturnofx = False
+        else:
+            istheturnofx = True        
+
+    def checkwin():
+        global close
+        global owon
+        global xwon
+        global tie
+        global listofclicks
+        listofclicks = []
+        for i in listofrectangles:
+            listofclicks.append(i.text)
+        if check_win('X'):
+            xwon = True
+        if check_win('O'):
+            owon = True
+        if check_tie() and xwon == False and owon == False:
+            tie = True
+        if xwon or owon or tie:
+            close = True
+
+    def check_win(letter):
+        variable = False
+        if listofclicks[0] == letter and listofclicks[1] == letter and listofclicks[2] == letter:
+            variable = True
+        if listofclicks[3] == letter and listofclicks[4] == letter and listofclicks[5] == letter:
+            variable = True
+        if listofclicks[6] == letter and listofclicks[7] == letter and listofclicks[8] == letter:
+            variable = True
+        if listofclicks[0] == letter and listofclicks[3] == letter and listofclicks[6] == letter:
+            variable = True
+        if listofclicks[1] == letter and listofclicks[4] == letter and listofclicks[7] == letter:
+            variable = True
+        if listofclicks[2] == letter and listofclicks[5] == letter and listofclicks[8] == letter:
+            variable = True
+        if listofclicks[0] == letter and listofclicks[4] == letter and listofclicks[8] == letter:
+            variable = True
+        if listofclicks[2] == letter and listofclicks[4] == letter and listofclicks[6] == letter:
+            variable = True
+        return variable
+
+    def check_tie():
+        tie = True
+        for i in listofclicks:
+            if i == None:
+                tie = False
+                break
+        return(tie)
+
+    closew = False
+    while closew != True:
+        w = display.set_mode((1500, 750))
+        listofrectangles = []
+        x = 500
+        y = 100
+        owon = False
+        xwon = False
+        tie = False
+        istheturnofx = True
+        for i in range(3):
+            for i in range(3):
+                listofrectangles.append(Button(None, w, x, y, 150, 150, (0, 0, 255)))
+                x += 200
+            y += 200
+            x = 500
+        clock = time.Clock()
+        close = False
+        while close != True:
+            w.fill((255, 255, 255))
+            w.blit(font.SysFont('Arial', 50).render('1-exit', True, (0, 255, 0)), (100, 100))
+            for i in event.get():
+                if i.type == QUIT:
+                    close = True
+                    closew = True
+                    closeall = True
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        close = True
+                        closew = True
+                for j in listofrectangles:
+                    j.click(j.set_text)
+            if closeall:
+                close = True
+            for j in listofrectangles:
+                j.show()
+            checkwin()
+            display.update()
+            clock.tick(60)
+        close = False
+        while close != True:
+            w.fill((255, 255, 255))      
+            if closew:
+                close = True
+            for i in event.get():
+                if i.type == QUIT:
+                    close = True
+                    closew = True
+                    closeall = True
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        close = True
+                    if i.key == K_2:
+                        close = True
+                        closew = True
+            if xwon:
+                w.blit(font.SysFont('Arial', 100).render('X wins! (1-try again, 2-exit)', True, (0, 255, 0)), (100, 200))
+            if owon:
+                w.blit(font.SysFont('Arial', 100).render('O wins! (1-try again, 2-exit)', True, (0, 255, 0)), (100, 200))
+            if tie:
+                w.blit(font.SysFont('Arial', 100).render("It's a tie! (1-try again, 2-exit)", True, (0, 255, 0)), (100, 200))            
+            display.update()
+            clock.tick(60)
+
+def f9():
+    global closeall
+    global players
+    global b1wasclicked
+    global turn
+    global playerwhowon
+    global close
+    class Button():
+        def __init__(self, text, window, x = 100, y = 100, width = 500, height = 50, colour = (255, 255, 255)):
+            self.rect = rect.Rect(x, y, width, height)
+            self.colour = colour
+            self.window = window
+            self.text = font.SysFont('Arial', height).render(text, True, (0, 0, 0))
+        def show(self):
+            draw.rect(self.window, self.colour, self.rect)
+            self.window.blit(self.text, (self.rect.x, self.rect.y))
+        def click(self, function):
+            if i.type == MOUSEBUTTONDOWN and i.button == 1:
+                x, y = i.pos
+            try:
+                if self.rect.collidepoint(x, y) and b1wasclicked:
+                    function()
+                    function()
+                if self.rect.collidepoint(x, y) and b1wasclicked == False:
+                    function()
+            except:
+                pass
+
+    def b1clicked():
+        global players
+        global b1wasclicked
+        players = 2
+        b1wasclicked = True
+
+    def b2clicked():
+        global players
+        players = 2
+
+    def b3clicked():
+        global players
+        players = 3
+
+    def b4clicked():
+        global players
+        players = 4
+
+    def rolldicef():
+        global turn
+        global playerwhowon
+        global close
+        dice = randint(1, 6)
+        for i in range(dice):
+            if playerlist[turn].x < 540:
+                playerlist[turn]. y -= 50
+                playerlist[turn].x += 450
+            else:
+                playerlist[turn].x -= 50
+            if playerlist[turn].y < 100:
+                playerwhowon = turn + 1
+                close = True
+            for j in greenrectangles:
+                if playerlist[turn].colliderect(j) and i == (dice - 1):
+                    for i in range(5):
+                        if playerlist[turn].x < 540:
+                            playerlist[turn]. y -= 50
+                            playerlist[turn].x += 450
+                        else:
+                            playerlist[turn].x -= 50
+                        if playerlist[turn].y < 100:
+                            playerwhowon = turn + 1
+                            close = True
+            for r in redrectangles:
+                if playerlist[turn].colliderect(r) and i == (dice - 1):
+                    for i in range(5):
+                        if playerlist[turn].x > 950:
+                            playerlist[turn]. y += 50
+                            playerlist[turn].x -= 450
+                        else:
+                            playerlist[turn].x += 50
+        turn += 1
+        if turn > (players - 1):
+            turn = 0
+
+    closew = False
+    while closew != True:
+        b1wasclicked = False
+        w = display.set_mode((1500, 750))
+        clock = time.Clock()
+        players = None
+        b1 = Button('1 player', w)
+        b2 = Button('2 players', w, 100, 150)
+        b3 = Button('3 players', w, 100, 200)
+        b4 = Button('4 players', w, 100, 250)
+        buttons = [b1, b2, b3, b4]
+        functions = [b1clicked, b2clicked, b3clicked, b4clicked]
+        close = False
+        while close != True:
+            w.fill((255, 255, 255))
+            w.blit(font.SysFont('Arial', 50).render('1-quit', True, (0, 0, 0)), (100, 300)) 
+            for i in event.get():
+                if i.type == QUIT:
+                    closeall = True
+                if i.type == MOUSEBUTTONDOWN and i.button == 1:
+                    x, y = i.pos
+                if i.type == KEYDOWN and i.key == K_1:
+                    close = True
+                    closew = True
+            try:
+                for i in range(4):
+                    if buttons[i].rect.collidepoint(x, y):
+                        close = True
+                        functions[i]()
+            except:
+                pass
+            for i in buttons:
+                i.show()
+            if closeall:
+                close = True
+            display.update()
+            clock.tick(60)
+        rectangles = []
+        x = 500
+        y = 100
+        for i in range(10):
+            for j in range(10):
+                rectangles.append(rect.Rect(x, y, 40, 40))
+                x += 50
+            y += 50
+            x = 500
+        x = 950
+        y -= 50
+        playerlist = []
+        try:
+            for i in range(players):
+                if i == 1:
+                    x += 20
+                if i == 2:
+                    x -= 20
+                    y += 20
+                if i == 3:
+                    x += 20
+                playerlist.append(rect.Rect(x, y, 20, 20))
+        except:
+            pass
+        close = False
+        greenrectangles = [rect.Rect(600, 300, 40, 40), rect.Rect(800, 200, 40, 40), rect.Rect(500, 500, 40, 40), rect.Rect(700, 400, 40, 40), rect.Rect(700, 100, 40, 40)]
+        redrectangles = [rect.Rect(700, 300, 40, 40),  rect.Rect(650, 200, 40, 40), rect.Rect(800, 500, 40, 40), rect.Rect(600, 400, 40, 40), rect.Rect(750, 100, 40, 40)]
+        rolldice = Button('click here to roll the dice', w, 500, 50)
+        turn = 0
+        while close != True:
+            w.fill((255, 255, 255))
+            w.blit(font.SysFont('Arial', 50).render('1-quit', True, (0, 255, 0)), (100, 100)) 
+            for i in event.get():
+                if i.type == QUIT:
+                    closew = True
+                    closeall = True
+                rolldice.click(rolldicef)
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        closew = True
+            if closew:
+                close = True
+            for i in rectangles:
+                draw.rect(w, (0, 0, 255), i)
+            for i in greenrectangles:
+                draw.rect(w, (0, 255, 0), i)
+            for i in redrectangles:
+                draw.rect(w, (255, 0, 0), i)
+            counter = len(rectangles)
+            for i in rectangles:
+                w.blit(font.SysFont('Arial', 20).render(str(counter), True, (255, 255, 255)), (i.x, i.y))
+                counter -= 1
+            try:
+                draw.rect(w, (255, 255, 0), playerlist[0])
+                draw.rect(w, (255, 0, 255), playerlist[1])
+                draw.rect(w, (0, 0, 0), playerlist[2])
+                draw.rect(w, (0, 255, 255), playerlist[3])
+            except:
+                pass
+            rolldice.show()
+            display.update()
+            clock.tick(60)
+        close = False
+        while close != True:
+            w.fill((255, 255, 255))
+            for i in event.get():
+                if i.type == QUIT:
+                    closew = True
+                    closeall = True
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        close = True
+                    if i.key == K_2:
+                        close = True
+                        closew = True
+            if closew:
+                close = True  
+            try:
+                if b1wasclicked and playerwhowon == 1:
+                    w.blit(font.SysFont('Arial', 70).render('You win (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100)) 
+                if b1wasclicked and playerwhowon == 2:
+                    w.blit(font.SysFont('Arial', 70).render('You lose (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100)) 
+                if b1wasclicked == False:
+                    w.blit(font.SysFont('Arial', 70).render('player ' + str(playerwhowon) + ' won! (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100))
+            except:
+                pass
+            display.update()
+            clock.tick(60)
+
 closeall = False
 while closeall == False:
     w = display.set_mode((1500, 750))
@@ -976,7 +1344,7 @@ while closeall == False:
     y = 50
     display.set_caption('video game collection')
     rectangles = []
-    for i in range(7):
+    for i in range(9):
         controls.append(False)
         rectangles.append(rect.Rect(50, y, 1400, 70))
         y += 70
@@ -988,8 +1356,10 @@ while closeall == False:
     text5 = font1.render('platformer video game II', True, (0, 0, 0))
     text6 = font1.render('jump', True, (0, 0, 0))
     text7 = font1.render('jump II', True,(0, 0, 0))
-    texts = [text1, text2, text3, text4, text5, text6, text7]
-    functions = [f1, f2, f3, f4, f5, f6, f7]
+    text8 = font1.render('tic tac toe', True,(0, 0, 0))
+    text9 = font1.render('board game', True,(0, 0, 0))
+    texts = [text1, text2, text3, text4, text5, text6, text7, text8, text9]
+    functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9]
     clock = time.Clock()
     xclick = None
     yclick = None
@@ -1005,7 +1375,7 @@ while closeall == False:
             if i.type == MOUSEBUTTONDOWN and i.button == 1:
                 xclick, yclick = i.pos
         if xclick != None and yclick != None:
-            for i in range(7):
+            for i in range(9):
                 if rectangles[i].collidepoint(xclick, yclick):
                     functions[i]()
         xclick = None
