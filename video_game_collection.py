@@ -250,6 +250,7 @@ def f3():
         closewin = False
         while True:
             w.fill((255, 255, 255))
+            w.blit(font.SysFont('Arial', 50).render('1-quit', True, (255, 0, 0)), (100, 100))
             draw.rect(w, (0, 255, 0), r1)
             draw.rect(w, (0, 255, 0), r2)
             draw.rect(w, (0, 0, 255), r3)
@@ -280,6 +281,8 @@ def f3():
                         r2_move_up = True
                     if i.key == K_DOWN:
                         r2_move_down = True
+                    if i.key == K_1:
+                       close = True 
                 elif i.type == KEYUP:
                     if i.key == K_w:
                         r1_move_up = False
@@ -607,7 +610,7 @@ def f5():
                         r1_move_right = False
                     if i.key == K_LEFT:
                         r1_move_left = False
-                    elif i.key == K_s:
+                    elif i.key == K_a:
                         r1_move_left = False
             if buttons_pressed:
                 display_manual = False
