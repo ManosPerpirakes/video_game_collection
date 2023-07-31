@@ -1272,7 +1272,7 @@ def f9():
             pass
         close = False
         greenrectangles = [rect.Rect(600, 300, 40, 40), rect.Rect(800, 200, 40, 40), rect.Rect(500, 500, 40, 40), rect.Rect(700, 400, 40, 40), rect.Rect(700, 100, 40, 40)]
-        redrectangles = [rect.Rect(700, 300, 40, 40),  rect.Rect(650, 200, 40, 40), rect.Rect(800, 500, 40, 40), rect.Rect(600, 400, 40, 40), rect.Rect(750, 100, 40, 40)]
+        redrectangles = [rect.Rect(700, 300, 40, 40),  rect.Rect(650, 200, 40, 40), rect.Rect(600, 500, 40, 40), rect.Rect(600, 400, 40, 40), rect.Rect(650, 100, 40, 40)]
         rolldice = Button('click here to roll the dice', w, 500, 50)
         turn = 0
         while close != True:
