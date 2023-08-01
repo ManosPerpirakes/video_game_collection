@@ -1182,11 +1182,14 @@ def f9():
         if b1wasclicked:
             if turn == 0:
                 dicenumber = randint(1, 6)
+                dicenumberlocal = dicenumber
             elif turn == 1:
                 dicenumber2 = randint(1, 6)
+                dicenumberlocal = dicenumber2
         else:
             dicenumber = randint(1, 6)
-        for i in range(dicenumber):
+            dicenumberlocal = dicenumber
+        for i in range(dicenumberlocal):
             if playerlist[turn].x < 540:
                 playerlist[turn]. y -= 50
                 playerlist[turn].x += 450
@@ -1196,7 +1199,7 @@ def f9():
                 playerwhowon = turn + 1
                 close = True
             for j in greenrectangles:
-                if playerlist[turn].colliderect(j) and i == (dicenumber - 1):
+                if playerlist[turn].colliderect(j) and i == (dicenumberlocal - 1):
                     for i in range(5):
                         if playerlist[turn].x < 540:
                             playerlist[turn]. y -= 50
@@ -1207,7 +1210,7 @@ def f9():
                             playerwhowon = turn + 1
                             close = True
             for r in redrectangles:
-                if playerlist[turn].colliderect(r) and i == (dicenumber - 1):
+                if playerlist[turn].colliderect(r) and i == (dicenumberlocal - 1):
                     for i in range(5):
                         if playerlist[turn].x > 950:
                             playerlist[turn]. y += 50
@@ -1346,7 +1349,7 @@ def f9():
                 if b1wasclicked and playerwhowon == 1:
                     w.blit(font.SysFont('Arial', 70).render('You win (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100)) 
                 if b1wasclicked and playerwhowon == 2:
-                    w.blit(font.SysFont('Arial', 70).render('You lose (1-try again)', True, (0, 255, 0)), (100, 100)) 
+                    w.blit(font.SysFont('Arial', 70).render('You lose (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100)) 
                 if b1wasclicked == False:
                     w.blit(font.SysFont('Arial', 70).render('player ' + str(playerwhowon) + ' won! (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100))
             except:
