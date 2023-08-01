@@ -1178,7 +1178,14 @@ def f9():
         global playerwhowon
         global close
         global dicenumber
-        dicenumber = randint(1, 6)
+        global dicenumber2
+        if b1wasclicked:
+            if turn == 0:
+                dicenumber = randint(1, 6)
+            elif turn == 1:
+                dicenumber2 = randint(1, 6)
+        else:
+            dicenumber = randint(1, 6)
         for i in range(dicenumber):
             if playerlist[turn].x < 540:
                 playerlist[turn]. y -= 50
@@ -1212,8 +1219,8 @@ def f9():
             turn = 0
         draw.rect(w, (0, 255, 0), rect.Rect(1050, 300, 50, 50))
 
-    closeall = False
-    while closeall != True:
+    closew = False
+    while closew != True:
         b1wasclicked = False
         w = display.set_mode((1500, 750))
         display.set_caption('Board game')
@@ -1244,6 +1251,7 @@ def f9():
                 i.show()
             if closeall:
                 close = True
+                closew = True
             display.update()
             clock.tick(60)
         rectangles = []
@@ -1273,17 +1281,26 @@ def f9():
         close = False
         greenrectangles = [rect.Rect(600, 300, 40, 40), rect.Rect(800, 200, 40, 40), rect.Rect(500, 500, 40, 40), rect.Rect(700, 400, 40, 40), rect.Rect(700, 100, 40, 40)]
         redrectangles = [rect.Rect(700, 300, 40, 40),  rect.Rect(650, 200, 40, 40), rect.Rect(600, 500, 40, 40), rect.Rect(600, 400, 40, 40), rect.Rect(650, 100, 40, 40)]
-        rolldice = Button('click here to roll the dice', w, 500, 50)
         dicenumber = None
         turn = 0
         while close != True:
             w.fill((255, 255, 255))
+            w.blit(font.SysFont('Arial', 50).render('press space to roll the dice', True, (255, 0, 0)), (500, 50))
             for i in event.get():
                 if i.type == QUIT:
                     closeall = True
-                rolldice.click(rolldicef)
-            if closeall:
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        closew = True
+                    if i.key == K_SPACE:
+                        if b1wasclicked: 
+                            rolldicef()
+                            rolldicef()
+                        else:
+                            rolldicef() 
+            if closeall or closew:
                 close = True
+                closew = True
             for i in rectangles:
                 draw.rect(w, (0, 0, 255), i)
             for i in greenrectangles:
@@ -1301,9 +1318,14 @@ def f9():
                 draw.rect(w, (0, 255, 255), playerlist[3])
             except:
                 pass
-            rolldice.show()
-            if dicenumber != None:
-                w.blit(font.SysFont('Arial', 50).render("dice: " + str(dicenumber), True, (255, 0, 0)), (1100, 300))
+            if b1wasclicked:
+                if dicenumber != None and dicenumber2 != None:
+                    w.blit(font.SysFont('Arial', 50).render("dice1: " + str(dicenumber), True, (255, 0, 0)), (1100, 300))
+                    w.blit(font.SysFont('Arial', 50).render("dice2: " + str(dicenumber2), True, (255, 0, 0)), (1100, 350))
+            else:
+                if dicenumber != None:
+                    w.blit(font.SysFont('Arial', 50).render("dice: " + str(dicenumber), True, (255, 0, 0)), (1100, 300))
+            w.blit(font.SysFont('Arial', 50).render("1-exit", True, (255, 0, 0)), (1100, 500))
             display.update()
             clock.tick(60)
         close = False
@@ -1315,15 +1337,18 @@ def f9():
                 if i.type == KEYDOWN:
                     if i.key == K_1:
                         close = True
-            if closeall:
+                    if i.key == K_2:
+                        closew = True
+            if closeall or closew:
                 close = True  
+                closew = True
             try:
                 if b1wasclicked and playerwhowon == 1:
-                    w.blit(font.SysFont('Arial', 70).render('You win (1-try again)', True, (0, 255, 0)), (100, 100)) 
+                    w.blit(font.SysFont('Arial', 70).render('You win (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100)) 
                 if b1wasclicked and playerwhowon == 2:
                     w.blit(font.SysFont('Arial', 70).render('You lose (1-try again)', True, (0, 255, 0)), (100, 100)) 
                 if b1wasclicked == False:
-                    w.blit(font.SysFont('Arial', 70).render('player ' + str(playerwhowon) + ' won! (1-try again)', True, (0, 255, 0)), (100, 100))
+                    w.blit(font.SysFont('Arial', 70).render('player ' + str(playerwhowon) + ' won! (1-try again, 2-exit)', True, (0, 255, 0)), (100, 100))
             except:
                 pass
             display.update()
