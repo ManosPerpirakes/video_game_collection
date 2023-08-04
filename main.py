@@ -1,4 +1,5 @@
 from random import randint
+from time import time as t
 from pygame import *
 init()
 
@@ -1461,6 +1462,146 @@ def f10():
             display.update()
             clock.tick(60)
 
+def f11():
+    global enemies
+    global closeall
+    global new_enemy
+    global accelerate
+    global speed
+    global lives
+    global close
+    global closeapp
+    global win
+
+    class Enemy():
+        def __init__(self, speed, collision):
+            self.rect = rect.Rect(randint(1500, 3000), randint(0, 700), 50, 50)
+            self.collision = collision
+            enemies.append(self)
+
+    def refresh_enemies():
+        global lives
+        for enemy in enemies:
+            draw.rect(w, (255, 0, 0), enemy.rect)
+            enemy.rect.x -= speed
+            if enemy.rect.colliderect(vehicle):
+                if enemy.collision == False:
+                    enemy.collision = True
+                    lives -= 1
+            if enemy.rect.x <= 0:
+                enemy.rect.x = 1500
+                enemy.rect.y = randint(0, 700)
+                enemy.collision = False
+
+    def check_finish():
+        global close
+        global win
+        marker.x -= speed
+        if marker.x <= -30000:
+            close = True
+            win = True
+        if lives <= 0:
+            close = True
+
+    def move_vehicle():
+        global speed
+        keyspressed = key.get_pressed()
+        if keyspressed[K_d] or keyspressed[K_RIGHT]:
+            accelerate = True
+        else:
+            accelerate = False
+        if (keyspressed[K_w] or keyspressed[K_UP]) and vehicle.y > 0:
+            vehicle.y -= 10
+        if (keyspressed[K_s] or keyspressed[K_DOWN]) and vehicle.y < 720:
+            vehicle.y += 10
+        if accelerate:
+            if speed <= 300:
+                speed += 1
+        elif speed > 0:
+            speed -= 1  
+        if speed < 0:
+            speed = 0
+        draw.rect(w, (0, 255, 0), vehicle)
+
+    closeapp = False
+    while closeapp == False:
+        w = display.set_mode((1500, 750))
+        marker = rect.Rect(0, 0, 0, 0)
+        lives = 5
+        enemies = []
+        for i in range(5):
+            new_enemy = Enemy(randint(5, 10), False)
+        speed = 0
+        vehicle = rect.Rect(100, 300, 50, 30)
+        clock = time.Clock()
+        close = False
+        accelerate = False
+        win = False
+        start = t()
+        while close == False:
+            w.fill((255, 255, 255))
+            w.blit(font.Font(None, 50).render('speed:' + str(speed), True, (0, 0, 0)), (100, 0))
+            w.blit(font.Font(None, 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
+            w.blit(font.Font(None, 50).render('1-exit', True, (0, 0, 0)), (100, 700))
+            for i in event.get():
+                if i.type == QUIT:
+                    close = True
+                    closeall = True
+                    closeapp = True
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        close = True
+                        closeapp = True
+            move_vehicle()
+            refresh_enemies()
+            check_finish()
+            display.update()
+            clock.tick(60)
+        end = t()
+        if win:
+            close = False
+            while close == False:
+                w.fill((255, 255, 255))
+                if closeall:
+                    close = True
+                for i in event.get():
+                    if i.type == QUIT:
+                        close = True
+                        closeall = True
+                        closeapp = True
+                    if i.type == KEYDOWN:
+                        if i.key == K_2:
+                            close = True
+                            closeapp = True
+                keyspressed = key.get_pressed()
+                if keyspressed[K_1]:
+                    close = True
+                w.blit(font.Font(None, 50).render('you win! (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
+                w.blit(font.Font(None, 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
+                display.update()
+                clock.tick(60)
+        else:
+            close = False
+            while close == False:
+                w.fill((255, 255, 255))
+                if closeall:
+                    close = True
+                for i in event.get():
+                    if i.type == QUIT:
+                        close = True
+                        closeall = True
+                        closeapp = True
+                    if i.type == KEYDOWN:
+                        if i.key == K_2:
+                            close = True
+                            closeapp = True
+                keyspressed = key.get_pressed()
+                if keyspressed[K_1]:
+                    close = True
+                w.blit(font.Font(None, 50).render('Game over (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
+                display.update()
+                clock.tick(60)
+
 closeall = False
 while closeall == False:
     w = display.set_mode((1500, 750))
@@ -1470,7 +1611,7 @@ while closeall == False:
     y = 50
     display.set_caption('video game collection')
     rectangles = []
-    for i in range(10):
+    for i in range(11):
         controls.append(False)
         rectangles.append(rect.Rect(50, y, 1400, 50))
         y += 50
@@ -1485,8 +1626,9 @@ while closeall == False:
     text8 = font1.render('tic tac toe', True,(0, 0, 0))
     text9 = font1.render('board game', True,(0, 0, 0))
     text10 = font1.render('snake game', True, (0, 0, 0))
-    texts = [text1, text2, text3, text4, text5, text6, text7, text8, text9, text10]
-    functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10]
+    text11 = font1.render('acceleration', True, (0, 0, 0))
+    texts = [text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11]
+    functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11]
     clock = time.Clock()
     xclick = None
     yclick = None
@@ -1502,7 +1644,7 @@ while closeall == False:
             if i.type == MOUSEBUTTONDOWN and i.button == 1:
                 xclick, yclick = i.pos
         if xclick != None and yclick != None:
-            for i in range(10):
+            for i in range(11):
                 if rectangles[i].collidepoint(xclick, yclick):
                     functions[i]()
         xclick = None
