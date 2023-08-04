@@ -1227,7 +1227,6 @@ def f9():
     while closew != True:
         b1wasclicked = False
         w = display.set_mode((1500, 750))
-        display.set_caption('Board game')
         clock = time.Clock()
         players = None
         b1 = Button('1 player', w)
@@ -1540,9 +1539,9 @@ def f11():
         start = t()
         while close == False:
             w.fill((255, 255, 255))
-            w.blit(font.Font(None, 50).render('speed:' + str(speed), True, (0, 0, 0)), (100, 0))
-            w.blit(font.Font(None, 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
-            w.blit(font.Font(None, 50).render('1-exit', True, (0, 0, 0)), (100, 700))
+            w.blit(font.SysFont('Arial', 50).render('speed:' + str(speed), True, (0, 0, 0)), (100, 0))
+            w.blit(font.SysFont('Arial', 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
+            w.blit(font.SysFont('Arial', 50).render('1-exit', True, (0, 0, 0)), (100, 700))
             for i in event.get():
                 if i.type == QUIT:
                     close = True
@@ -1576,8 +1575,8 @@ def f11():
                 keyspressed = key.get_pressed()
                 if keyspressed[K_1]:
                     close = True
-                w.blit(font.Font(None, 50).render('you win! (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
-                w.blit(font.Font(None, 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
+                w.blit(font.SysFont('Arial', 50).render('you win! (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
+                w.blit(font.SysFont('Arial', 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
                 display.update()
                 clock.tick(60)
         else:
@@ -1598,7 +1597,7 @@ def f11():
                 keyspressed = key.get_pressed()
                 if keyspressed[K_1]:
                     close = True
-                w.blit(font.Font(None, 50).render('Game over (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
+                w.blit(font.SysFont('Arial', 50).render('Game over (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
                 display.update()
                 clock.tick(60)
 
