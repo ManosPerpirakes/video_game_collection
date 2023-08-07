@@ -1135,8 +1135,10 @@ def f9():
     global playerwhowon
     global close
     global dicenumber
+    global closew
+    
     class Button():
-        def __init__(self, text, window, x = 100, y = 100, width = 500, height = 50, colour = (255, 255, 255)):
+        def __init__(self, text, window, x = 100, y = 100, width = 300, height = 50, colour = (255, 0, 0)):
             self.rect = rect.Rect(x, y, width, height)
             self.colour = colour
             self.window = window
@@ -1173,6 +1175,12 @@ def f9():
     def b4clicked():
         global players
         players = 4
+    
+    def b5clicked():
+        global closew
+        global close
+        closew = True
+        close = True
 
     def rolldicef():
         global turn
@@ -1230,11 +1238,12 @@ def f9():
         clock = time.Clock()
         players = None
         b1 = Button('1 player', w)
-        b2 = Button('2 players', w, 100, 150)
-        b3 = Button('3 players', w, 100, 200)
-        b4 = Button('4 players', w, 100, 250)
-        buttons = [b1, b2, b3, b4]
-        functions = [b1clicked, b2clicked, b3clicked, b4clicked]
+        b2 = Button('2 players', w, 100, 160)
+        b3 = Button('3 players', w, 100, 220)
+        b4 = Button('4 players', w, 100, 280)
+        b5 = Button('exit', w, 100, 340)
+        buttons = [b1, b2, b3, b4, b5]
+        functions = [b1clicked, b2clicked, b3clicked, b4clicked, b5clicked]
         close = False
         while close != True:
             w.fill((255, 255, 255))
@@ -1244,7 +1253,7 @@ def f9():
                 if i.type == MOUSEBUTTONDOWN and i.button == 1:
                     x, y = i.pos
             try:
-                for i in range(4):
+                for i in range(5):
                     if buttons[i].rect.collidepoint(x, y):
                         close = True
                         functions[i]()
