@@ -1471,9 +1471,10 @@ def f11():
     global close
     global closeapp
     global win
+    global accelerate
 
     class Enemy():
-        def __init__(self, speed, collision):
+        def __init__(self, collision):
             self.rect = rect.Rect(randint(1500, 3000), randint(0, 700), 50, 50)
             self.collision = collision
             enemies.append(self)
@@ -1495,8 +1496,8 @@ def f11():
     def check_finish():
         global close
         global win
-        marker.x -= speed
-        if marker.x <= -30000:
+        marker.x -= int(speed)
+        if marker.x <= -100000:
             close = True
             win = True
         if lives <= 0:
@@ -1504,19 +1505,25 @@ def f11():
 
     def move_vehicle():
         global speed
+        global accelerate
+        global deccelerate
         keyspressed = key.get_pressed()
         if keyspressed[K_d] or keyspressed[K_RIGHT]:
             accelerate = True
         else:
             accelerate = False
+        if keyspressed[K_a] or keyspressed[K_LEFT]:
+            deccelerate = True
+        else:
+            deccelerate = False
         if (keyspressed[K_w] or keyspressed[K_UP]) and vehicle.y > 0:
             vehicle.y -= 10
         if (keyspressed[K_s] or keyspressed[K_DOWN]) and vehicle.y < 720:
             vehicle.y += 10
         if accelerate:
             if speed <= 300:
-                speed += 1
-        elif speed > 0:
+                speed += 0.5
+        if deccelerate and speed > 0:
             speed -= 1  
         if speed < 0:
             speed = 0
@@ -1529,7 +1536,7 @@ def f11():
         lives = 5
         enemies = []
         for i in range(5):
-            new_enemy = Enemy(randint(5, 10), False)
+            new_enemy = Enemy(False)
         speed = 0
         vehicle = rect.Rect(100, 300, 50, 30)
         clock = time.Clock()
@@ -1539,7 +1546,7 @@ def f11():
         start = t()
         while close == False:
             w.fill((255, 255, 255))
-            w.blit(font.SysFont('Arial', 50).render('speed:' + str(speed), True, (0, 0, 0)), (100, 0))
+            w.blit(font.SysFont('Arial', 50).render('speed:' + str(int(speed)), True, (0, 0, 0)), (100, 0))
             w.blit(font.SysFont('Arial', 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
             w.blit(font.SysFont('Arial', 50).render('1-exit', True, (0, 0, 0)), (100, 700))
             for i in event.get():
