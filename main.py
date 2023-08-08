@@ -16,7 +16,6 @@ def f1():
     try_again = True
     closeapp = False
     while try_again:
-        w = display.set_mode((1500, 750))
         player = rect.Rect(100, 375, 50, 50)
         enemies = []
         for i in range(5):
@@ -27,7 +26,6 @@ def f1():
         lives = 5
         counter = 0
         score = 0
-        clock = time.Clock()
         font1 = font.SysFont('Arial', 30)
         text1 = font1.render("1-quit", True, (0, 255, 0))
         while True:
@@ -126,7 +124,6 @@ def f2():
     close = False
     counter5 = True
     while counter5:
-        w = display.set_mode((1500, 750))
         r1 = rect.Rect(100, 325, 10, 100)
         r2 = rect.Rect(1390, 0, 10, 750)
         r3 = rect.Rect(740, 365, 20, 20)
@@ -137,7 +134,6 @@ def f2():
         font1 = font.SysFont('Arial', 100)
         font2 = font.SysFont('Arial', 50)
         text2 = font2.render("1-quit", True, (255, 0, 0))
-        clock = time.Clock()
         counter1 = 5
         counter2 = 50
         counter3 = False
@@ -235,7 +231,6 @@ def f3():
     counter2 = True
     close = False
     while counter2:
-        w = display.set_mode((1500, 750))
         r1 = rect.Rect(100, 300, 10, 150)
         r2 = rect.Rect(1390, 300, 10, 150)
         r3 = rect.Rect(740, 365, 20, 20)
@@ -246,7 +241,6 @@ def f3():
         r3_x_add = 2
         r3_y_add = randint(3, 7)
         font1 = font.SysFont('Arial', 100)
-        clock = time.Clock()
         counter1 = 0
         closewin = False
         while True:
@@ -340,7 +334,6 @@ def f4():
     close = False
     counter7 = True
     while counter7:
-        w = display.set_mode((1500, 750))
         r1 = rect.Rect(100, 600, 30, 30)
         r2 = rect.Rect(0, 630, 1500, 120)
         r3 = rect.Rect(300, 550, 950, 4)
@@ -374,7 +367,6 @@ def f4():
         text3 = font2.render('(1-quit)', True, (255, 0, 0))
         r1_move_right = False
         r1_move_left = False
-        clock = time.Clock()
         counter1 = 1
         counter2 = False
         counter3 = False
@@ -500,7 +492,6 @@ def f5():
     close = False
     while close_app == False:
         win = False
-        w = display.set_mode((1500, 750))
         r1 = rect.Rect(100, 600, 30, 30)
         r2 = rect.Rect(0, 630, 6500, 225)
         r3 = rect.Rect(300, 550, 100, 8)
@@ -540,7 +531,7 @@ def f5():
         r19_2 = rect.Rect(2200, 358, 200, 8)
         r23_2 = rect.Rect(2900, 408, 400, 8)
         r27_2 = rect.Rect(3850, 538, 500, 8)
-        clock = time.Clock()
+        
         break_game_loop = False
         r1_move_right = False
         r1_move_left = False 
@@ -670,7 +661,6 @@ def f5():
             display.update()
             clock.tick(60)
         if see_manual:
-            w = display.set_mode((1500, 750))
             close_manual = False
             try_again = True
             text2 = font1.render("Controls:", True, (255, 0, 0))
@@ -702,7 +692,6 @@ def f5():
                 display.update()
                 clock.tick(60)
         elif see_manual == False:
-            w = display.set_mode((1500, 750))
             close_end_screen = False
             try_again = False
             if win == False:
@@ -735,8 +724,7 @@ def f6():
     counter8 = True
     while counter8:
         xs1 = 1500
-        score = 0
-        w = display.set_mode((1500, 750))
+        score = 0 
         r1 = rect.Rect(100, 600, 30, 30)
         r2 = rect.Rect(0, 630, 1500, 120)
         s1 = rect.Rect(xs1, 580, 50, 50)
@@ -750,7 +738,6 @@ def f6():
         counter5 = 20
         counter6 = True
         counter7 = 10
-        clock = time.Clock()
         while counter2 > 0:
             if close:
                 counter2 = 0
@@ -834,7 +821,6 @@ def f7():
         ys1_2 = 120
         ylist = [ys1_1, ys1_2] 
         score = 0
-        w = display.set_mode((1500, 750))
         r1 = rect.Rect(100, 600, 30, 30)
         r2 = rect.Rect(0, 630, 1500, 120)
         r3 = rect.Rect(0, 0, 1500, 120)
@@ -852,7 +838,6 @@ def f7():
         counter8 = randint(0, 1)
         counter9 = randint(0, 1)
         counter10 = 0
-        clock = time.Clock()
         while counter2 > 0:
             if counter9 == 0:
                 s1.y = ys1_1
@@ -1062,10 +1047,8 @@ def f8():
                 tie = False
                 break
         return(tie)
-
     closew = False
     while closew != True:
-        w = display.set_mode((1500, 750))
         listofrectangles = []
         x = 500
         y = 100
@@ -1079,7 +1062,6 @@ def f8():
                 x += 200
             y += 200
             x = 500
-        clock = time.Clock()
         close = False
         while close != True:
             w.fill((255, 255, 255))
@@ -1234,8 +1216,6 @@ def f9():
     closew = False
     while closew != True:
         b1wasclicked = False
-        w = display.set_mode((1500, 750))
-        clock = time.Clock()
         players = None
         b1 = Button('1 player', w)
         b2 = Button('2 players', w, 100, 160)
@@ -1370,7 +1350,6 @@ def f10():
     global closeall
     closefunction = False
     while closefunction != True:
-        w = display.set_mode((1500, 750))
         head = rect.Rect(250, 100, 10, 10)
         body = []
         x = 240
@@ -1379,7 +1358,6 @@ def f10():
             body.append(rect.Rect(x, y, 10, 10))
             x -= 10
         food = rect.Rect((randint(0, 149) * 10), (randint(0, 74) * 10), 10, 10)
-        clock = time.Clock()
         close = False
         move_up = False
         move_left = False
@@ -1540,7 +1518,6 @@ def f11():
 
     closeapp = False
     while closeapp == False:
-        w = display.set_mode((1500, 750))
         marker = rect.Rect(0, 0, 0, 0)
         lives = 5
         enemies = []
@@ -1548,7 +1525,6 @@ def f11():
             new_enemy = Enemy(False)
         speed = 0
         vehicle = rect.Rect(100, 300, 50, 30)
-        clock = time.Clock()
         close = False
         accelerate = False
         win = False
@@ -1637,9 +1613,9 @@ while closeall == False:
     text4 = font1.render('platformer video game I', True, (0, 0, 0))
     text5 = font1.render('platformer video game II', True, (0, 0, 0))
     text6 = font1.render('jump', True, (0, 0, 0))
-    text7 = font1.render('jump II', True,(0, 0, 0))
-    text8 = font1.render('tic tac toe', True,(0, 0, 0))
-    text9 = font1.render('board game', True,(0, 0, 0))
+    text7 = font1.render('jump II', True, (0, 0, 0))
+    text8 = font1.render('tic tac toe', True, (0, 0, 0))
+    text9 = font1.render('board game', True, (0, 0, 0))
     text10 = font1.render('snake game', True, (0, 0, 0))
     text11 = font1.render('acceleration', True, (0, 0, 0))
     menutext = font1.render('Choose a video game', True, (0, 0, 0))
