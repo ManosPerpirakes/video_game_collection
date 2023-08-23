@@ -1,5 +1,4 @@
 from random import randint
-from time import time as t
 from pygame import *
 init()
 
@@ -1530,7 +1529,7 @@ def f11():
         close = False
         accelerate = False
         win = False
-        start = t()
+        timevar = 0
         while close == False:
             w.fill((255, 255, 255))
             w.blit(font.SysFont('Arial', 50).render('speed:' + str(int(speed)), True, (0, 0, 0)), (100, 0))
@@ -1545,12 +1544,12 @@ def f11():
                     if i.key == K_1:
                         close = True
                         closeapp = True
+            timevar += 1
             move_vehicle()
             refresh_enemies()
             check_finish()
             display.update()
             clock.tick(60)
-        end = t()
         if win:
             close = False
             while close == False:
@@ -1570,7 +1569,7 @@ def f11():
                 if keyspressed[K_1]:
                     close = True
                 w.blit(font.SysFont('Arial', 50).render('you win! (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
-                w.blit(font.SysFont('Arial', 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
+                w.blit(font.SysFont('Arial', 50).render('time:' + str(timevar/60) + ' seconds', True, (255, 0, 0)), (100, 150))
                 display.update()
                 clock.tick(60)
         else:
