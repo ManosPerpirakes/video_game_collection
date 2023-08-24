@@ -25,43 +25,59 @@ def f1():
         lives = 5
         counter = 0
         score = 0
+        pausevar = False
         font1 = font.SysFont('Arial', 30)
-        text1 = font1.render("1-quit", True, (0, 255, 0))
+        text1 = font1.render("1-quit, 2-pause", True, (0, 255, 0))
+        pausewait = 30
         while True:
-            counter += 1
-            if counter == 60:
-                score += 1
-                counter = 0
-            w.fill((255, 255, 255))
-            draw.rect(w, (0, 0, 255), player)
-            for enemy in enemies:
-                draw.rect(w, (255, 0, 0), enemy.rect)
-                enemy.rect.x -= enemy.speed
-                if enemy.rect.colliderect(player):
-                    if enemy.collision == False:
-                        enemy.collision = True
-                        lives -= 1
-                if enemy.rect.x <= 0:
-                    enemy.rect.x = 1500
-                    enemy.rect.y = randint(0, 700)
-                    enemy.collision = False
-                    enemy.speed = randint(10, 20)
+            if pausewait > 30:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
+            if not pausevar:
+                counter += 1
+                if counter == 60:
+                    score += 1
+                    counter = 0
+                for enemy in enemies:
+                    enemy.rect.x -= enemy.speed
+                    if enemy.rect.colliderect(player):
+                        if enemy.collision == False:
+                            enemy.collision = True
+                            lives -= 1
+                    if enemy.rect.x <= 0:
+                        enemy.rect.x = 1500
+                        enemy.rect.y = randint(0, 700)
+                        enemy.collision = False
+                        enemy.speed = randint(10, 20)
+                if go_up and player.y >= 10:
+                    player.y -= 10
+                if go_down and player.y <= 690:
+                    player.y += 10
+                if lives == 0:
+                    close = True
             for i in event.get():
                 if i.type == QUIT:
                     closeapp = True
                     closeall = True
                 if i.type == KEYDOWN:
-                    if i.key == K_UP:
-                        go_up = True
-                    elif i.key == K_w:
-                        go_up = True
-                    if i.key == K_DOWN:
-                        go_down = True
-                    elif i.key == K_s:
-                        go_down = True
+                    if not pausevar:
+                        if i.key == K_UP:
+                            go_up = True
+                        elif i.key == K_w:
+                            go_up = True
+                        if i.key == K_DOWN:
+                            go_down = True
+                        elif i.key == K_s:
+                            go_down = True
                     if i.key == K_1:
                         close = True
-                if i.type == KEYUP:
+                if i.type == KEYUP and not pausevar:
                     if i.key == K_UP:
                         go_up = False
                     elif i.key == K_w:
@@ -70,16 +86,14 @@ def f1():
                         go_down = False
                     elif i.key == K_s:
                         go_down = False
-            if go_up and player.y >= 10:
-                player.y -= 10
-            if go_down and player.y <= 690:
-                player.y += 10
-            if lives == 0:
-                close = True
             if closeapp:
                 close = True
             if close == True:
                 break
+            w.fill((255, 255, 255))
+            draw.rect(w, (0, 0, 255), player)
+            for enemy in enemies:
+                draw.rect(w, (255, 0, 0), enemy.rect)
             w.blit(text1, (1000, 50))
             text2 = font1.render('lives: ' + str(lives), True, (0, 255, 0))
             w.blit(text2, (1000, 80))
@@ -132,13 +146,24 @@ def f2():
         r3_y_add = randint(3, 7)
         font1 = font.SysFont('Arial', 100)
         font2 = font.SysFont('Arial', 50)
-        text2 = font2.render("1-quit", True, (255, 0, 0))
+        text2 = font2.render("1-quit, 2-pause", True, (255, 0, 0))
         counter1 = 5
         counter2 = 50
         counter3 = False
         counter4 = False
         score = 0
+        pausevar = False
+        pausewait = 30
         while True:
+            if pausewait > 30:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
             w.fill((255, 255, 255))
             text3 = font2.render('lives: ' + str(counter1), True, (255, 0, 0))
             w.blit(text2, (50, 50))
@@ -146,23 +171,24 @@ def f2():
             draw.rect(w, (0, 255, 0), r1)
             draw.rect(w, (0, 255, 0), r2)
             draw.rect(w, (0, 0, 255), r3)
-            if r3.colliderect(r1):
-                r3_x_add = randint(7, 12)
-                r3_y_add = randint(5, 10)
-                counter4 = True
-            if r3.colliderect(r2):
-                r3_x_add = -(randint(7, 12))
-                r3_y_add = randint(5, 10)
-                if counter4:
-                    score += 1
-                    counter4 = False
-            if r3.x <= 0 and counter2 <= 0:
-                counter1 -= 1
-                counter2 = 50
-                r3.x = 740 
-                r3.y = 365
-                r3_x_add = randint(7, 12)
-            counter2 -= 1
+            if not pausevar:
+                if r3.colliderect(r1):
+                    r3_x_add = randint(7, 12)
+                    r3_y_add = randint(5, 10)
+                    counter4 = True
+                if r3.colliderect(r2):
+                    r3_x_add = -(randint(7, 12))
+                    r3_y_add = randint(5, 10)
+                    if counter4:
+                        score += 1
+                        counter4 = False
+                if r3.x <= 0 and counter2 <= 0:
+                    counter1 -= 1
+                    counter2 = 50
+                    r3.x = 740 
+                    r3.y = 365
+                    r3_x_add = randint(7, 12)
+                counter2 -= 1
             if counter1 <= 0:
                 break
             if close:
@@ -172,35 +198,38 @@ def f2():
                     close = True
                     closeall = True
                 if i.type == KEYDOWN:
-                    if i.key == K_UP:
-                        r1_move_up = True
-                    elif i.key == K_w:
-                        r1_move_up = True
-                    if i.key == K_DOWN:
-                        r1_move_down = True
-                    elif i.key == K_s:
-                        r1_move_down = True
+                    if not pausevar:
+                        if i.key == K_UP:
+                            r1_move_up = True
+                        elif i.key == K_w:
+                            r1_move_up = True
+                        if i.key == K_DOWN:
+                            r1_move_down = True
+                        elif i.key == K_s:
+                            r1_move_down = True
                     if i.key == K_1:
                         counter1 = 0
                 elif i.type == KEYUP:
-                    if i.key == K_UP:
-                        r1_move_up = False
-                    elif i.key == K_w:
-                        r1_move_up = False
-                    if i.key == K_DOWN:
-                        r1_move_down = False
-                    elif i.key == K_s:
-                        r1_move_down = False
-            if r1_move_up and r1.y > 0:
-                r1.y -= 6   
-            if r1_move_down and r1.y < 650:
-                r1.y += 6               
-            if r3.y >= 720:
-                r3_y_add = -(abs(r3_y_add))
-            if r3.y <= 0:
-                r3_y_add = abs(r3_y_add)
-            r3.x += r3_x_add
-            r3.y += r3_y_add  
+                    if not pausevar:
+                        if i.key == K_UP:
+                            r1_move_up = False
+                        elif i.key == K_w:
+                            r1_move_up = False
+                        if i.key == K_DOWN:
+                            r1_move_down = False
+                        elif i.key == K_s:
+                            r1_move_down = False
+            if not pausevar:
+                if r1_move_up and r1.y > 0:
+                    r1.y -= 6   
+                if r1_move_down and r1.y < 650:
+                    r1.y += 6               
+                if r3.y >= 720:
+                    r3_y_add = -(abs(r3_y_add))
+                if r3.y <= 0:
+                    r3_y_add = abs(r3_y_add)
+                r3.x += r3_x_add
+                r3.y += r3_y_add  
             display.update()
             clock.tick(60)
         while True:
@@ -242,24 +271,36 @@ def f3():
         font1 = font.SysFont('Arial', 100)
         counter1 = 0
         closewin = False
+        pausevar = False
+        pausewait = 30
         while True:
+            if pausewait > 30:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
             w.fill((255, 255, 255))
-            w.blit(font.SysFont('Arial', 50).render('1-quit', True, (255, 0, 0)), (100, 100))
+            w.blit(font.SysFont('Arial', 50).render('1-quit, 2-pause', True, (255, 0, 0)), (100, 100))
             draw.rect(w, (0, 255, 0), r1)
             draw.rect(w, (0, 255, 0), r2)
             draw.rect(w, (0, 0, 255), r3)
-            if r3.colliderect(r1):
-                r3_x_add = randint(7, 12)
-                r3_y_add = randint(5, 10)
-            if r3.colliderect(r2):
-                r3_x_add = -(randint(7, 12))
-                r3_y_add = randint(5, 10)
-            if r3.x >= 1470:
-                counter1 += 1
-                break
-            if r3.x <= 0:
-                counter1 += 2
-                closewin = True
+            if not pausevar:
+                if r3.colliderect(r1):
+                    r3_x_add = randint(7, 12)
+                    r3_y_add = randint(5, 10)
+                if r3.colliderect(r2):
+                    r3_x_add = -(randint(7, 12))
+                    r3_y_add = randint(5, 10)
+                if r3.x >= 1470:
+                    counter1 += 1
+                    break
+                if r3.x <= 0:
+                    counter1 += 2
+                    closewin = True
             if closewin:
                 break
             for i in event.get():
@@ -267,42 +308,45 @@ def f3():
                     close = True
                     closeall = True
                 if i.type == KEYDOWN:
-                    if i.key == K_w:
-                        r1_move_up = True
-                    if i.key == K_s:
-                        r1_move_down = True
-                    if i.key == K_UP:
-                        r2_move_up = True
-                    if i.key == K_DOWN:
-                        r2_move_down = True
+                    if not pausevar:
+                        if i.key == K_w:
+                            r1_move_up = True
+                        if i.key == K_s:
+                            r1_move_down = True
+                        if i.key == K_UP:
+                            r2_move_up = True
+                        if i.key == K_DOWN:
+                            r2_move_down = True
                     if i.key == K_1:
                        close = True 
                 elif i.type == KEYUP:
-                    if i.key == K_w:
-                        r1_move_up = False
-                    if i.key == K_s:
-                        r1_move_down = False
-                    if i.key == K_UP:
-                        r2_move_up = False
-                    if i.key == K_DOWN:
-                        r2_move_down = False
+                    if not pausevar:
+                        if i.key == K_w:
+                            r1_move_up = False
+                        if i.key == K_s:
+                            r1_move_down = False
+                        if i.key == K_UP:
+                            r2_move_up = False
+                        if i.key == K_DOWN:
+                            r2_move_down = False
             if close:
                 closewin = True
                 counter1 += 2
-            if r1_move_up and r1.y > 0:
-                r1.y -= 8   
-            if r1_move_down and r1.y < 600:
-                r1.y += 8
-            if r2_move_up and r2.y > 0:
-                r2.y -= 8 
-            if r2_move_down and r2.y < 600:
-                r2.y += 8              
-            if r3.y >= 720:
-                r3_y_add = -(abs(r3_y_add))
-            if r3.y <= 0:
-                r3_y_add = abs(r3_y_add)
-            r3.x += r3_x_add
-            r3.y += r3_y_add  
+            if not pausevar:
+                if r1_move_up and r1.y > 0:
+                    r1.y -= 8   
+                if r1_move_down and r1.y < 600:
+                    r1.y += 8
+                if r2_move_up and r2.y > 0:
+                    r2.y -= 8 
+                if r2_move_down and r2.y < 600:
+                    r2.y += 8              
+                if r3.y >= 720:
+                    r3_y_add = -(abs(r3_y_add))
+                if r3.y <= 0:
+                    r3_y_add = abs(r3_y_add)
+                r3.x += r3_x_add
+                r3.y += r3_y_add  
             display.update()
             clock.tick(60)
         while counter1 != 0:
@@ -530,7 +574,6 @@ def f5():
         r19_2 = rect.Rect(2200, 358, 200, 8)
         r23_2 = rect.Rect(2900, 408, 400, 8)
         r27_2 = rect.Rect(3850, 538, 500, 8)
-        
         break_game_loop = False
         r1_move_right = False
         r1_move_left = False 
@@ -729,7 +772,7 @@ def f6():
         s1 = rect.Rect(xs1, 580, 50, 50)
         font1 = font.SysFont('Arial', 50)
         font2 = font.SysFont('Arial', 100)
-        text1 = font1.render("1-quit", True, (255, 0, 0))
+        text1 = font1.render("1-quit, 2-pause", True, (255, 0, 0))
         counter1 = True
         counter2 = 5
         counter3 = -1
@@ -737,10 +780,22 @@ def f6():
         counter5 = 20
         counter6 = True
         counter7 = 10
+        pausevar = False
+        pausewait = True
         while counter2 > 0:
+            if pausewait > 30:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
             if close:
                 counter2 = 0
-            r1.y += 6
+            if not pausevar:
+                r1.y += 6
             w.fill((255, 255, 255))
             text2 = font1.render('lives: ' + str(counter2), True, (255, 0, 0))
             w.blit(text2, (50, 100))
@@ -752,41 +807,44 @@ def f6():
                     close = True
                     closeall = True
                 if i.type == KEYDOWN:
-                    if i.key == K_UP and counter1 and counter3 == -1:
-                        counter3 = 0
-                        counter1 = False
-                    if i.key == K_SPACE and counter1 and counter3 == -1:
-                        counter3 = 0
-                        counter1 = False
+                    if not pausevar:
+                        if i.key == K_UP and counter1 and counter3 == -1:
+                            counter3 = 0
+                            counter1 = False
+                        if i.key == K_SPACE and counter1 and counter3 == -1:
+                            counter3 = 0
+                            counter1 = False
                     if i.key == K_1:
                         counter2 = 0
-                if i.type == MOUSEBUTTONDOWN and counter1 and counter3 == -1 and i.button == 1:
+                if i.type == MOUSEBUTTONDOWN and counter1 and counter3 == -1 and i.button == 1 and not pausevar:
                     counter3 = 0
                     counter1 = False
-            if counter3 >= 0 and counter3 <= 15:
-                counter3 += 1
-                r1.y -= 12
-            if counter3 > 15:
-                counter3 = -1
-            if r1.colliderect(r2):
-                r1.y -= 6
-                counter1 = True
+            if not pausevar:
+                if counter3 >= 0 and counter3 <= 15:
+                    counter3 += 1
+                    r1.y -= 12
+                if counter3 > 15:
+                    counter3 = -1
+                if r1.colliderect(r2):
+                    r1.y -= 6
+                    counter1 = True
             draw.rect(w, (255, 0, 0), s1)
-            if counter4:
-                counter7 = randint(10, 25)
-                counter4 = False
-            s1.x -= counter7
-            if s1.x <= -50:
-                s1.x = xs1
-                if counter6:
-                    score += 1
-                counter4 = True
-                counter6 = True
-            if r1.colliderect(s1) and counter5 <= 0:
-                counter5 = 20
-                counter2 -= 1
-                counter6 = False
-            counter5 -= 1
+            if not pausevar:
+                if counter4:
+                    counter7 = randint(10, 25)
+                    counter4 = False
+                s1.x -= counter7
+                if s1.x <= -50:
+                    s1.x = xs1
+                    if counter6:
+                        score += 1
+                    counter4 = True
+                    counter6 = True
+                if r1.colliderect(s1) and counter5 <= 0:
+                    counter5 = 20
+                    counter2 -= 1
+                    counter6 = False
+                counter5 -= 1
             if counter2 <= 0:
                 text2 = font2.render('Score: ' + str(score) + ' (1-try again, 2-exit)', True, (255, 0, 0))
             display.update()
@@ -837,19 +895,31 @@ def f7():
         counter8 = randint(0, 1)
         counter9 = randint(0, 1)
         counter10 = 0
+        pausevar = False
+        pausewait = 30
         while counter2 > 0:
-            if counter9 == 0:
-                s1.y = ys1_1
-                r1c = (0, 0, 255)
-                s1c = (255, 0, 0)
-            elif counter9 == 1:
-                r1c = (255, 0, 0)
-                s1c = (0, 0, 255)
-                s1.y = ylist[counter8]  
-            if r1.y >= 450:
-                r1.y += 6
-            elif r1.y <= 270:
-                r1.y -= 6      
+            if pausewait > 30:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
+            if not pausevar:
+                if counter9 == 0:
+                    s1.y = ys1_1
+                    r1c = (0, 0, 255)
+                    s1c = (255, 0, 0)
+                elif counter9 == 1:
+                    r1c = (255, 0, 0)
+                    s1c = (0, 0, 255)
+                    s1.y = ylist[counter8]  
+                if r1.y >= 450:
+                    r1.y += 6
+                elif r1.y <= 270:
+                    r1.y -= 6      
             w.fill((255, 255, 255))
             text2 = font1.render('lives: ' + str(counter2), True, (255, 0, 0))
             w.blit(text2, (1200, 250))
@@ -862,73 +932,76 @@ def f7():
                     close = True
                     closeall = True
                 if i.type == KEYDOWN:
-                    if i.key == K_UP and counter1 and counter3 == -1 and counter9 == 0:
-                        counter3 = 0
-                        counter1 = False 
-                    if i.key == K_SPACE and counter1 and counter3 == -1 and counter9 == 0:
-                        counter3 = 0
-                        counter1 = False
-                    if i.key == K_UP and counter1 and counter3 == -1 and counter9 == 1:
-                        if r1.y >= 450:
-                            r1.y = 120
-                        elif r1.y <= 270:
-                            r1.y = 600
-                    if i.key == K_SPACE and counter1 and counter3 == -1 and counter9 == 1:
-                        if r1.y >= 450:
-                            r1.y = 120
-                        elif r1.y <= 270:
-                            r1.y = 600
+                    if not pausevar:
+                        if i.key == K_UP and counter1 and counter3 == -1 and counter9 == 0:
+                            counter3 = 0
+                            counter1 = False 
+                        if i.key == K_SPACE and counter1 and counter3 == -1 and counter9 == 0:
+                            counter3 = 0
+                            counter1 = False
+                        if i.key == K_UP and counter1 and counter3 == -1 and counter9 == 1:
+                            if r1.y >= 450:
+                                r1.y = 120
+                            elif r1.y <= 270:
+                                r1.y = 600
+                        if i.key == K_SPACE and counter1 and counter3 == -1 and counter9 == 1:
+                            if r1.y >= 450:
+                                r1.y = 120
+                            elif r1.y <= 270:
+                                r1.y = 600
                     if i.key == K_1:
                         counter2 = 0
-                if i.type == MOUSEBUTTONDOWN and counter1 and counter3 == -1 and counter9 == 0 and i.button == 1:
+                if i.type == MOUSEBUTTONDOWN and counter1 and counter3 == -1 and counter9 == 0 and i.button == 1 and not pausevar:
                     counter3 = 0
                     counter1 = False
-                if i.type == MOUSEBUTTONDOWN and counter1 and counter3 == -1 and counter9 == 1 and i.button == 1:
+                if i.type == MOUSEBUTTONDOWN and counter1 and counter3 == -1 and counter9 == 1 and i.button == 1 and not pausevar:
                     if r1.y >= 450:
                         r1.y = 120
                     elif r1.y <= 270:
                         r1.y = 600
             if close:
                 counter2 = 0
-            if counter3 >= 0 and counter3 <= 15:
-                counter3 += 1
-                if r1.y >= 450:
-                    r1.y -= 12
-            if counter3 > 15:
-                counter3 = -1
-            if r1.colliderect(r2) or r1.colliderect(r3):
-                if r1.y >= 450:
-                    r1.y -= 6
-                elif r1.y <= 270:
-                    r1.y += 6
-                counter1 = True
+            if not pausevar:
+                if counter3 >= 0 and counter3 <= 15:
+                    counter3 += 1
+                    if r1.y >= 450:
+                        r1.y -= 12
+                if counter3 > 15:
+                    counter3 = -1
+                if r1.colliderect(r2) or r1.colliderect(r3):
+                    if r1.y >= 450:
+                        r1.y -= 6
+                    elif r1.y <= 270:
+                        r1.y += 6
+                    counter1 = True
             draw.rect(w, s1c, s1)
-            if counter4:
-                if counter9 == 0 or counter10 == 10:
-                    counter7 = randint(10, 25)
-                elif counter9 == 1 and counter10 != 10:
-                    counter7 = randint(40, 60)
-                counter4 = False
-            s1.x -= counter7
-            if counter10 >= 10:
-                counter9 = randint(0, 1)
-                if counter9 == 0:
-                    if r1.y <= 270: 
-                        r1.y = 600
-                counter10 = 0
-            if s1.x <= -50:
-                counter8 = randint(0, 1)
-                s1.x = xs1
-                counter10 += 1
-                if counter6:
-                    score += 1
-                counter4 = True
-                counter6 = True
-            if r1.colliderect(s1) and counter5 <= 0:
-                counter5 = 20
-                counter2 -= 1
-                counter6 = False
-            counter5 -= 1
+            if not pausevar:
+                if counter4:
+                    if counter9 == 0 or counter10 == 10:
+                        counter7 = randint(10, 25)
+                    elif counter9 == 1 and counter10 != 10:
+                        counter7 = randint(40, 60)
+                    counter4 = False
+                s1.x -= counter7
+                if counter10 >= 10:
+                    counter9 = randint(0, 1)
+                    if counter9 == 0:
+                        if r1.y <= 270: 
+                            r1.y = 600
+                    counter10 = 0
+                if s1.x <= -50:
+                    counter8 = randint(0, 1)
+                    s1.x = xs1
+                    counter10 += 1
+                    if counter6:
+                        score += 1
+                    counter4 = True
+                    counter6 = True
+                if r1.colliderect(s1) and counter5 <= 0:
+                    counter5 = 20
+                    counter2 -= 1
+                    counter6 = False
+                counter5 -= 1
             if counter2 <= 0:
                 text2 = font2.render('Score: ' + str(score) + ' (1-try again, 2-exit)', True, (255, 0, 0))
             display.update()
@@ -1362,69 +1435,85 @@ def f10():
         move_left = False
         move_down = False
         move_right = True
+        pausevar = False
+        pausewait = 10
         while close != True:
+            if pausewait > 10:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
             w.fill((0, 0, 0))
-            w.blit(font.SysFont('Arial', 30).render('1-exit', True, (255, 0, 0)), (100, 100))
+            w.blit(font.SysFont('Arial', 30).render('1-exit, 2-pause', True, (255, 0, 0)), (100, 100))
             for i in event.get():
                 if i.type == QUIT:
                     close = True
                     closeall = True
                     closefunction = True
                 if i.type == KEYDOWN:
-                    if (i.key == K_w or i.key == K_UP) and move_down == False:
-                        move_up = True
-                        move_left = False
-                        move_down = False
-                        move_right = False
-                    if (i.key == K_a or i.key == K_LEFT) and move_right == False:
-                        move_up = False
-                        move_left = True
-                        move_down = False
-                        move_right = False
-                    if (i.key == K_s or i.key == K_DOWN) and move_up == False:
-                        move_up = False
-                        move_left = False
-                        move_down = True
-                        move_right = False
-                    if (i.key == K_d or i.key == K_RIGHT) and move_left == False:
-                        move_up = False
-                        move_left = False
-                        move_down = False
-                        move_right = True
+                    if not pausevar:
+                        if (i.key == K_w or i.key == K_UP) and move_down == False:
+                            move_up = True
+                            move_left = False
+                            move_down = False
+                            move_right = False
+                        if (i.key == K_a or i.key == K_LEFT) and move_right == False:
+                            move_up = False
+                            move_left = True
+                            move_down = False
+                            move_right = False
+                        if (i.key == K_s or i.key == K_DOWN) and move_up == False:
+                            move_up = False
+                            move_left = False
+                            move_down = True
+                            move_right = False
+                        if (i.key == K_d or i.key == K_RIGHT) and move_left == False:
+                            move_up = False
+                            move_left = False
+                            move_down = False
+                            move_right = True
                     if i.key == K_1:
                         close = True
                         closefunction = True
-            if move_up:
-                head.y -= 10
-            if move_left:
-                head.x -= 10
-            if move_down:
-                head.y += 10
-            if move_right:
-                head.x += 10
+            if not pausevar:
+                if move_up:
+                    head.y -= 10
+                if move_left:
+                    head.x -= 10
+                if move_down:
+                    head.y += 10
+                if move_right:
+                    head.x += 10
             draw.rect(w, (0, 0, 255), head)
-            xofpreviousrect = head.x
-            yofpreviousrect = head.y
+            if not pausevar:
+                xofpreviousrect = head.x
+                yofpreviousrect = head.y
+                for i in body:
+                    xofthisrect = i.x
+                    yofthisrect = i.y
+                    i.x = xofpreviousrect
+                    i.y = yofpreviousrect
+                    xofpreviousrect = xofthisrect
+                    yofpreviousrect = yofthisrect
             for i in body:
-                xofthisrect = i.x
-                yofthisrect = i.y
-                i.x = xofpreviousrect
-                i.y = yofpreviousrect
-                xofpreviousrect = xofthisrect
-                yofpreviousrect = yofthisrect
                 draw.rect(w, (0, 0, 255), i)
-            counter = 0
-            for i in body:
-                if counter > 0:
-                    if i.colliderect(head):
-                        close = True
-                counter += 1
-            if head.colliderect(food):
-                body.append(rect.Rect(xofpreviousrect, yofpreviousrect, 10, 10))
-                food.x = (randint(0, 149) * 10)
-                food.y = (randint(0, 74) * 10)
-            if head.x < 0 or head.x > 1490 or head.y < 0 or head.y > 740:
-                close = True
+            if not pausevar:
+                counter = 0
+                for i in body:
+                    if counter > 0:
+                        if i.colliderect(head):
+                            close = True
+                    counter += 1
+                if head.colliderect(food):
+                    body.append(rect.Rect(xofpreviousrect, yofpreviousrect, 10, 10))
+                    food.x = (randint(0, 149) * 10)
+                    food.y = (randint(0, 74) * 10)
+                if head.x < 0 or head.x > 1490 or head.y < 0 or head.y > 740:
+                    close = True
             draw.rect(w, (0, 255, 0), food)
             display.update()
             clock.tick(20)
@@ -1468,7 +1557,6 @@ def f11():
     def refresh_enemies():
         global lives
         for enemy in enemies:
-            draw.rect(w, (255, 0, 0), enemy.rect)
             enemy.rect.x -= speed
             if enemy.rect.colliderect(vehicle):
                 if enemy.collision == False:
@@ -1515,7 +1603,6 @@ def f11():
             speed -= 0.05
         if speed < 0:
             speed = 0
-        draw.rect(w, (0, 255, 0), vehicle)
 
     closeapp = False
     while closeapp == False:
@@ -1530,11 +1617,22 @@ def f11():
         accelerate = False
         win = False
         timevar = 0
+        pausevar = False
+        pausewait = 30
         while close == False:
+            if pausewait > 30:
+                keys = key.get_pressed()
+                if keys[K_2]:
+                    if pausevar:
+                        pausevar = False
+                    else:
+                        pausevar = True
+                    pausewait = 0
+            pausewait += 1
             w.fill((255, 255, 255))
             w.blit(font.SysFont('Arial', 50).render('speed:' + str(int(speed)), True, (0, 0, 0)), (100, 0))
             w.blit(font.SysFont('Arial', 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
-            w.blit(font.SysFont('Arial', 50).render('1-exit', True, (0, 0, 0)), (100, 700))
+            w.blit(font.SysFont('Arial', 50).render('1-exit, 2-pause', True, (0, 0, 0)), (100, 700))
             for i in event.get():
                 if i.type == QUIT:
                     close = True
@@ -1544,10 +1642,14 @@ def f11():
                     if i.key == K_1:
                         close = True
                         closeapp = True
-            timevar += 1
-            move_vehicle()
-            refresh_enemies()
-            check_finish()
+            draw.rect(w, (0, 255, 0), vehicle)
+            for enemy in enemies:
+                draw.rect(w, (255, 0, 0), enemy.rect)
+            if not pausevar:
+                timevar += 1
+                move_vehicle()
+                refresh_enemies()
+                check_finish()
             display.update()
             clock.tick(60)
         if win:
