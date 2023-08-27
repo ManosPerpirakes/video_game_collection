@@ -1696,6 +1696,94 @@ def f11():
                 display.update()
                 clock.tick(60)
 
+def f12():
+    global closeall
+
+    class Colourrectangle():
+        def __init__(self, x, y, w, h):
+            self.rect = rect.Rect(x, y, w, h)
+            self.colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+
+    closeapp = False
+    while not closeapp:
+        w = display.set_mode((1500, 750))
+        rectangles = []
+        x = 500
+        y = 100
+        for i in range(10):
+            for j in range(10):
+                rectangles.append(Colourrectangle(x, y, 40, 40))
+                x += 50
+            x = 500
+            y += 50
+        recttopress = Colourrectangle(1100, 100, 100, 100)
+        wait = 0
+        clock = time.Clock()
+        close = False
+        text_colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+        recttopressnum = randint(0, 99)
+        hashappenedagain = False
+        timevar = None
+        win = False
+        while not close:
+            wait += 1
+            if wait < 600:
+                if wait // 60 == wait / 60:
+                    for i in rectangles:
+                        i.colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+                    recttopress.colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+            else:
+                if hashappenedagain == False:
+                    recttopress.colour = rectangles[recttopressnum].colour
+                hashappenedagain = True 
+            w.fill((255, 255, 255))
+            if hashappenedagain:
+                w.blit(font.SysFont('Arial', 50).render('PRESS', True, (text_colour)), (1100, 500))
+            w.blit(font.SysFont('Arial', 50).render('1-exit', True, (text_colour)), (1100, 600))
+            for i in event.get():
+                if i.type == QUIT:
+                    close = True
+                    closeapp = True
+                    closeall = True
+                if i.type == MOUSEBUTTONDOWN and i.button == 1:
+                    x, y = i.pos
+                if i.type == KEYDOWN:
+                    if i.key == K_1:
+                        close = True
+                        closeapp = True
+            for i in rectangles:
+                if i.rect.collidepoint(x, y) and i.colour == recttopress.colour and not wait < 600:
+                    close = True
+                    timevar = (wait - 600) / 60
+            if closeapp:
+                close = True
+            for i in range(100):
+                draw.rect(w, rectangles[i].colour, rectangles[i].rect)
+            draw.rect(w, recttopress.colour, recttopress.rect)
+            display.update()
+            clock.tick(60)
+        close = False
+        text_colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+        while not close:
+            w.fill((255, 255, 255))
+            for i in event.get():
+                if i.type == QUIT:
+                    close = True
+                    closeapp = True
+                    closeall = True
+            if closeapp:
+                close = True
+            w.blit(font.SysFont('Arial', 50).render('you win! (1-try again, 2-exit)', True, (255, 0, 0)), (100, 100))
+            w.blit(font.SysFont('Arial', 50).render('time:' + str(timevar) + ' seconds', True, (255, 0, 0)), (100, 150))
+            keys = key.get_pressed()
+            if keys[K_1]:
+                close = True
+            if keys[K_2]:
+                closeapp = True
+                close = True
+            display.update()
+            clock.tick(60)
+
 closeall = False
 while closeall == False:
     w = display.set_mode((1500, 750))
@@ -1705,11 +1793,11 @@ while closeall == False:
     y = 50
     display.set_caption('video game collection')
     rectangles = []
-    for i in range(11):
+    for i in range(12):
         controls.append(False)
-        rectangles.append(rect.Rect(50, y, 500, 50))
-        y += 60
-    font1 = font.SysFont('Arial', 50)
+        rectangles.append(rect.Rect(40, y, 450, 40))
+        y += 50
+    font1 = font.SysFont('Arial', 40)
     text1 = font1.render('evasion', True, (0, 0, 0))
     text2 = font1.render('paddle game I', True, (0, 0, 0))
     text3 = font1.render('paddle game II', True, (0, 0, 0))
@@ -1721,9 +1809,10 @@ while closeall == False:
     text9 = font1.render('board game', True, (0, 0, 0))
     text10 = font1.render('snake game', True, (0, 0, 0))
     text11 = font1.render('acceleration', True, (0, 0, 0))
+    text12 = font1.render('colour press', True, (0, 0, 0))
     menutext = font1.render('Choose a video game', True, (0, 0, 0))
-    texts = [text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11]
-    functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11]
+    texts = [text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11, text12]
+    functions = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12]
     clock = time.Clock()
     xclick = None
     yclick = None
@@ -1734,7 +1823,7 @@ while closeall == False:
             draw.rect(w, (255, 0, 0), i)
         for i in texts:
             w.blit(i, (50, y))
-            y += 60
+            y += 50
         w.blit(menutext, (700, 300))
         for i in event.get():
             if i.type == QUIT:
@@ -1742,7 +1831,7 @@ while closeall == False:
             if i.type == MOUSEBUTTONDOWN and i.button == 1:
                 xclick, yclick = i.pos
         if xclick != None and yclick != None:
-            for i in range(11):
+            for i in range(12):
                 if rectangles[i].collidepoint(xclick, yclick):
                     functions[i]()
         xclick = None
